@@ -1,0 +1,109 @@
+﻿@{
+    ViewBag.Title = "基础数据配置";
+}
+<script type="text/javascript">
+
+
+    function updateSuccess(json) {
+        var data=$.parseJSON(json.responseText);
+        if (data.result == "true") {
+            alert("保存成功！");
+           // window.location.href = "@Url.Action("Index", "Website")";
+        }
+    }
+
+</script>
+<div style="padding: 10px 10px 10px;">
+    @using (Ajax.BeginForm(new AjaxOptions { Url = Url.Action("SaveUser"), OnComplete = "updateSuccess" }))
+    {
+        <fieldset>
+            <legend>发布频率</legend>            
+            <div class="row">          
+                <label for="password" class="col-sm-1 control-label">小时范围1</label>                   
+                <div class="col-sm-1">
+                    <input type="text" id="startHour1" name="startHour1" class="form-control" value="@ViewBag.startHour1"
+                           placeholder="小时起始值" data-val="true" data-val-required="小时起始值！" />
+                    <span data-valmsg-for="startHour1" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="endHour1" name="endHour1" class="form-control" value="@ViewBag.endHour1"
+                           placeholder="小时结束值" data-val="true" data-val-required="小时结束值！" />
+                    <span data-valmsg-for="endHour1" data-valmsg-replace="true" class="text-warning"></span>
+                </div></div>
+                <div class="row">
+                    <label for="password" class="col-sm-1 control-label">文章范围1</label>
+                    <div class="col-sm-1">
+                        <input type="text" id="count11" name="count11" class="form-control" value="@ViewBag.count11"
+                               placeholder="文章起始数" data-val="true" data-val-required="文章起始数！" />
+                        <span data-valmsg-for="count11" data-valmsg-replace="true" class="text-warning"></span>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="text" id="count12" name="count12" class="form-control" value="@ViewBag.count12"
+                               placeholder="文章结束数" data-val="true" data-val-required="文章结束数！" />
+                        <span data-valmsg-for="count12" data-valmsg-replace="true" class="text-warning"></span>
+                    </div>
+                </div>                
+              <br />
+            <div class="row">
+                <label for="password" class="col-sm-1 control-label">小时范围2</label>
+                <div class="col-sm-1">
+                    <input type="text" id="startHour2" name="startHour2" class="form-control" value="@ViewBag.startHour2"
+                           placeholder="小时起始值" data-val="true" data-val-required="小时起始值！" />
+                    <span data-valmsg-for="startHour2" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="endHour2" name="endHour2" class="form-control" value="@ViewBag.endHour2"
+                           placeholder="小时结束值" data-val="true" data-val-required="小时结束值！" />
+                    <span data-valmsg-for="endHour2" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label for="password" class="col-sm-1 control-label">文章范围2</label>
+                <div class="col-sm-1">
+                    <input type="text" id="count21" name="count21" class="form-control" value="@ViewBag.count21"
+                           placeholder="文章起始数" data-val="true" data-val-required="文章起始数！" />
+                    <span data-valmsg-for="count21" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="count22" name="count22" class="form-control" value="@ViewBag.count22"
+                           placeholder="文章结束数" data-val="true" data-val-required="文章结束数！" />
+                    <span data-valmsg-for="count22" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <label for="password" class="col-sm-1 control-label">小时范围3</label>
+                <div class="col-sm-1">
+                    <input type="text" id="startHour3" name="startHour3" class="form-control" value="@ViewBag.startHour3"
+                           placeholder="小时起始值" data-val="true" data-val-required="小时起始值！" />
+                    <span data-valmsg-for="startHour3" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="endHour3" name="endHour3" class="form-control" value="@ViewBag.endHour3"
+                           placeholder="小时结束值" data-val="true" data-val-required="小时结束值！" />
+                    <span data-valmsg-for="endHour3" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label for="password" class="col-sm-1 control-label">文章范围3</label>
+                <div class="col-sm-1">
+                    <input type="text" id="count31" name="count31" class="form-control" value="@ViewBag.count31"
+                           placeholder="文章起始数" data-val="true" data-val-required="文章起始数！" />
+                    <span data-valmsg-for="count31" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="count32" name="count32" class="form-control" value="@ViewBag.count32"
+                           placeholder="文章结束数" data-val="true" data-val-required="文章结束数！" />
+                    <span data-valmsg-for="count32" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-lg active" id="sbut">保存</button>
+                </div>
+            </div>
+        </fieldset>
+    }
+</div>
+

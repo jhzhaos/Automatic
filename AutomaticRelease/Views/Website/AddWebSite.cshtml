@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.Title = "站点编辑";
+}
+<script type="text/javascript">
+
+
+    function updateSuccess(json) {
+        var data=$.parseJSON(json.responseText);
+        if (data.result == "true") {
+            alert("保存成功！");
+            window.location.href = "@Url.Action("Index", "Website")?wid="+data.id;
+        }  
+    }
+
+    function DeleteWebKey(o) {
+        $("#txtKeyName").val("");
+        $("#txtKeyUrl").val("");
+        //确认是否删除
+        if (confirm("是否删除此条信息？")) {
+            $(o).parent().parent().remove();
+            var keyNams = [];
+            var keyUrls = [];
+            $('#myTb tr').each(function (i) {
+                if (i > 0) {
+                    var tdArr = $(this).children();
+                    keyNams.push(tdArr.eq(0).text());
+                    keyUrls.push(tdArr.eq(1).text());
+                }
+            });
+            $("#WordKey").val(keyNams.join(","));
+            $("#kerUrls").val(keyUrls.join(","));
+        }
+    }
+
+    $(function () {      
+
+        $("#aAdd").click(function () {
+            $("#txtKeyName").val("");
+            $("#txtKeyUrl").val("");         
+            $("#aAdd").attr("data-target", "#myModal");         
+        });
+
+        $("#saveUrl").click(function () {
+            var txtKeyName = $("#WordKey").val();
+            var txtInputKey = $("#txtKeyName").val();
+            var txtInputUrl = $("#txtKeyUrl").val();
+            if (txtInputKey == "") {
+                alert("请输入关键词");
+                return;
+            }
+            if (txtInputUrl == "") {
+                alert("请输入地址");
+                return;
+            }
+            if (txtKeyName.indexOf(txtInputKey) < 0) {
+                $("#tbBodyTd").append("<tr><td>" + txtInputKey + "</td><td>" + txtInputUrl + "</td><td><a href='#' onclick='DeleteWebKey(this)'>删除</a></td></tr>")
+                var keyNams = [];
+                var keyUrls = [];
+                $('#myTb tr').each(function (i) {
+                    if (i > 0) {
+                        var tdArr = $(this).children();
+                        keyNams.push(tdArr.eq(0).text());
+                        keyUrls.push(tdArr.eq(1).text());
+                    }
+                });
+                $("#WordKey").val(keyNams.join(","));             
+                $("#kerUrls").val(keyUrls.join(","));
+            } else {
+                alert("关键词已经存在");
+            }
+        });
+    });
+</script>
+<div style="padding: 10px 10px 10px;">
+    @using (Ajax.BeginForm(new AjaxOptions { Url = Url.Action("SaveWebSite"), OnComplete = "updateSuccess" }))
+    {
+        <fieldset>
+            <legend>站点编辑</legend>
+            <input type="hidden"  id="id" name="id" value="@ViewBag.id"/>
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">站点名称</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="webName" name="webName" value="@ViewBag.webName"
+                           placeholder="站点名称" data-val="true" data-val-required="站点名称不能为空！"/>
+                    <span data-valmsg-for="webName" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">站点主域名</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="webHost" name="webHost" value="@ViewBag.webHost"
+                           placeholder="站点主域名" data-val="true" data-val-required="站点主域名不能为空！"/>
+                    <span data-valmsg-for="webUrl" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">后台地址</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="webAdminUrl" name="webAdminUrl" value="@ViewBag.webAdminUrl"
+                           placeholder="站点主域名" data-val="true" data-val-required="后台地址不能为空！" />
+                    <span data-valmsg-for="webAdminUrl" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">用户名</label>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" id="username" name="username" value="@ViewBag.loginName"
+                           placeholder="请输入用户名" data-val="true" data-val-required="用户名不能为空！"/>
+                    <span data-valmsg-for="username" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="text" class="col-sm-1 control-label">密码</label>
+                <div class="col-sm-3">
+                    <input type="password" id="password" name="password" class="form-control" value="@ViewBag.loginPassword" 
+                           placeholder="请输入密码" data-val="true" data-val-required="密码不能为空！"/>
+                    <span data-valmsg-for="password" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br /> 
+            <div class="form-inline">
+                <label for="text" class="col-sm-1 control-label">关键词</label>
+                <div class="col-sm-6"><textarea  rows="4" cols="10" id="WordKey" name="WordKey" class="form-control"  style="max-width:100%"
+                           placeholder="请输关键词“，”逗号隔开" data-val="true" data-val-required="关键词不能为空！" readonly="readonly">@ViewBag.WordKey</textarea>                  
+                    <a href="javascript:" class="btn btn-primary btn-sm" id="aAdd" data-toggle="modal">编辑</a>
+                    <span data-valmsg-for="WordKey" data-valmsg-replace="true" class="text-warning"></span>                    
+                </div>
+            </div><br /><br /> <br /><br /><br /><br /><br /><br />
+            <div class="form-group">
+                <label for="webPlatformId" class="col-sm-1 control-label">所属类目</label>
+                <div class="col-sm-3">
+                    <select id="webCategoryid" name="webCategoryid">
+                        @Html.Raw(HttpUtility.HtmlDecode(@ViewBag.webCategoryid))
+                    </select>
+                </div>
+            </div><br /><br />            
+            <div class="form-group">
+                <label for="categoryCode" class="col-sm-1 control-label">类目ID</label>
+                <div class="col-sm-3">
+                    <input type="text" id="categoryCode" name="categoryCode" class="form-control" value="@ViewBag.categoryCode"
+                           placeholder="请输入类目ID" data-val="true" data-val-required="类目ID不能为空！" />
+                    <span data-valmsg-for="categoryCode" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />  
+            <div class="form-group">
+                <label for="categoryCode" class="col-sm-1 control-label">网站图片目录</label>
+                <div class="col-sm-3">
+                    <input type="text" id="webImgPath" name="webImgPath" class="form-control" value="@ViewBag.webImgPath"
+                           placeholder="请输入类目ID" data-val="true" data-val-required="网站图片目录不能为空！" />
+                    <span data-valmsg-for="webImgPath" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />         
+            <div class="form-group">
+                <label for="categoryName" class="col-sm-1 control-label">类目名称</label>
+                <div class="col-sm-3">
+                    <input type="text" id="categoryName" name="categoryName" class="form-control" value="@ViewBag.categoryName"
+                           placeholder="请输入类目名称" />                 
+                </div>
+            </div><br /><br /> 
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">所属平台</label>
+                <div class="col-sm-3">
+                    <select id="webPlatformId" name="webPlatformId">
+                       @Html.Raw(HttpUtility.HtmlDecode(@ViewBag.webPlatformId))
+                    </select>
+                </div>
+            </div><br /><br />                   
+            <input id="webGroupId" name="webGroupId" type="hidden" value="@ViewBag.webGroupId" />
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-lg active" id="sbut">保存</button>
+                </div>
+            </div>
+        </fieldset>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            关键词
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-striped" id="myTb">
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>地址</th>
+                                    <th width="200">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbBodyTd">
+                                @Html.Raw(HttpUtility.HtmlDecode(@ViewBag.keylist))
+                            </tbody>
+                        </table>
+                        <input type="hidden" id="kerUrls" name="kerUrls" value="@ViewBag.WordUrl" />
+                        <input type="text" class="form-control" id="txtKeyName" name="txtKeyName"
+                               placeholder="关键词" />
+
+                        <input type="text" class="form-control" id="txtKeyUrl" name="txtKeyUrl"
+                               placeholder="关键词地址" data-val="true" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                            关闭
+                        </button>
+                        <button type="button" class="btn btn-primary" id="saveUrl">
+                            保存
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+    }
+</div>
+
+
+

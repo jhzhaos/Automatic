@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "站点管理";
+}
+<script type="text/javascript">
+    function getWebGroup() {
+        var ulBody = "";
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Website/GetWebGroup",
+            success: function (json) {
+                $("#ulBody").html("");
+                var typeData = $.parseJSON(json);
+                $.each(typeData, function (i, n) {
+                    if (n.groupParentCode == 0) {
+                        ulBody += "<li><span><i class=\"icon-folder-open\"></i> <a href=\"/Website/MyArticle?webGroupId=" + n.id + "\">" + n.groupName + "</a></span>";
+                        ulBody += "<ul>";
+                        $.each(typeData, function (j, m) {
+                            if (n.id == m.groupParentCode) {
+                                ulBody += "<li><span><i class=\"icon-minus-sign\"></i><a href=\"javascript:\"> " + m.groupName + "</a></span></li>";
+                            }
+                        });
+                        ulBody += "</ul></li>";
+                    }
+                });
+                $("#ulBody").append(ulBody);
+                $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+                $('.tree li.parent_li > span').on('click', function (e) {
+                    var children = $(this).parent('li.parent_li').find(' > ul > li');
+                    if (children.is(":visible")) {
+                        children.hide('fast');
+                    } else {
+                        children.show('fast');
+                    }
+                    e.stopPropagation();
+                });
+            }
+        });
+    }
+ $(function () {
+       getWebGroup();
+  });
+
+</script>
+<br /><br />
+<div class="col-md-3">
+    <div class="tree well">
+        <ul id="ulBody"></ul>
+    </div>   
+</div>
+<div class="col-md-9">
+    总篇数：@ViewBag.bodyCount
+    <table class="table table-striped" id="myTb">
+        <thead>
+            <tr>
+                <th>文章名称</th>
+                <th>seo关键词</th>
+                <th>日期</th>
+            </tr>
+        </thead>
+        <tbody id="tbBody">
+            @Html.Raw(HttpUtility.HtmlDecode(ViewBag.body))
+        </tbody>
+    </table>
+    </div>

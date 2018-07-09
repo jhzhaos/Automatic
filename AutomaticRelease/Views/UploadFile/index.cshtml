@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewBag.Title = "上传文件";   
+}
+<link href="~/Scripts/webuploader/webuploader.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/webuploader/webuploader.js"></script>
+<script src="~/Scripts/uploadFile.js"></script>
+<script type="text/javascript">
+    function getWebGroup() {
+        var ulBody = "";
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Website/GetWebGroup",
+            success: function (json) {
+                $("#ulBody").html("");
+                var typeData = $.parseJSON(json);
+                $.each(typeData, function (i, n) {
+                    if (n.groupParentCode == 0) {
+                        ulBody += "<li><input name=\"rdoGroup\" type=\"radio\"  data-val='" + n.groupParentCode + "'  data-nm='" + n.groupName + "' value='" + n.id + "'/><span><i class=\"icon-folder-open\"></i> <a href=\"javascript:\">" + n.groupName + "</a></span>";
+                        ulBody += "<ul>";
+                        $.each(typeData, function (j, m) {
+                            if (n.id == m.groupParentCode) {
+                                ulBody += "<li><span><i class=\"icon-minus-sign\"></i><a href=\"javascript:\"> " + m.groupName + "</a></span></li>";
+                            }
+                        });
+                        ulBody += "</ul></li>";
+                    }
+                });
+                $("#ulBody").append(ulBody);
+                $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+                $('.tree li.parent_li > span').on('click', function (e) {
+                    var children = $(this).parent('li.parent_li').find(' > ul > li');
+                    if (children.is(":visible")) {
+                        children.hide('fast');
+                    } else {
+                        children.show('fast');
+                    }
+                    e.stopPropagation();
+                });
+            }
+        });
+    }
+ $(function () {
+       getWebGroup();
+  });
+
+</script>
+<div class="row"> 
+    <div class="col-md-4">
+        <div class="tree well">
+            <ul id="ulBody"></ul>
+        </div>
+        <h2>栏目选择</h2>
+        <p>
+            <select id="webCategoryid">
+                @Html.Raw(HttpUtility.HtmlDecode(@ViewBag.webCategoryid))
+            </select>
+        </p>       
+    </div>
+    <div class="col-md-4">
+        <h2>文章上传</h2>
+        <p>仅支持txt格式压缩rar、zip格式</p>
+        <p><div id="uploader" class="wu-example">
+    <br />
+    <!--用来存放文件信息-->
+    <div id="thelist" class="uploader-list"></div>
+    <div>
+        <div id="picker">选择文件</div>
+        <input id="ctlBtn" type="button" value="开始上传" class="btn btn-default" />
+    </div>
+</div></p>
+    </div>
+    <div class="col-md-4">
+        <h2>图片上传</h2>
+        <p>仅支持图片格式压缩rar、zip格式</p>
+        <p><div id="uploader1" class="wu-example">
+    <br />
+    <!--用来存放文件信息-->
+    <div id="thelist1" class="uploader-list"></div>
+    <div>
+        <div id="picker1">选择文件</div>
+        <input id="ctlBtn1" type="button" value="开始上传" class="btn btn-default" />
+    </div>
+</div></p>       
+    </div>
+</div>
+<script>
+
+    $(function () {   
+        uploadFile("picker", "thelist", "ctlBtn", "txt");
+        uploadFile("picker1", "thelist1", "ctlBtn1", "img");
+    });   
+</script>
+

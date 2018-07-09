@@ -1,0 +1,260 @@
+﻿
+@{
+    ViewBag.Title = "站点管理";
+}
+<script type="text/javascript">
+    function deleteWeb(id) {
+        //确认是否删除
+        if (confirm("是否删除此条信息？")) {
+            $.ajax({
+                type: 'post',
+                url: '/Website/DeleteWebSite',
+                data: 'id=' + id,
+                success: function (json) {
+                    if (json.result == "true") {
+                        alert("恭喜你，已成功删除！");
+                        getModuleInfo();
+                    } else {
+                        alert("抱歉，删除失败！");
+                    }
+                }
+            })
+        }
+    }
+
+    function deleteWebGroup(id) {
+        //确认是否删除
+        if (confirm("是否删除此条信息？")) {
+            $.ajax({
+                type: 'post',
+                url: '/Website/DeleteWebSiteGroup',
+                data: 'id=' + id,
+                success: function (json) {
+                    if (json.result == "true") {
+                        alert("恭喜你，已成功删除！");
+                        getWebGroup($("input[name='rdoGroup']:checked").val());
+                    } else {
+                        alert("抱歉，删除失败！");
+                    }
+                }
+            })
+        }
+    }
+
+    function loginTest(id) {
+        $.ajax({
+            type: 'post',
+            url: '/Website/loginTest',
+            data: 'id=' + id,
+            success: function (json) {
+                if (json.result == "true") {
+                    alert("登陆测试成功！");                  
+                } else {
+                    alert("登陆测试失败！");
+                }
+            }
+        })
+    }
+
+    //获取发布模块类型
+    function getModuleInfo(id) {       
+            $.ajax({
+                type: "POST",
+                url: "/Website/GetWebSite",
+                data: 'id=' + id,
+                success: function (json) {
+                    $("#tbBody").html("");
+                    var typeData = $.parseJSON(json);
+                    $.each(typeData, function (i, n) {
+                        var tbBody = "<tr><td>" + n.webName + "</td><td>" + n.webHost + "</td><td>" + n.loginName + "</td><td>" + n.loginPassword + "</td><td>" + n.webPlatformName + "</td><td>新闻发布</td><td><a href ='../../Website/AddWebSite?id=" + n.id + "'>编辑</a>|<a href='#' onclick='loginTest(" + n.id + ")'>测试登陆</a>|<a href='#' onclick='deleteWeb(" + n.id + ")'>删除</a></td></tr>";
+                        $("#tbBody").append(tbBody);
+                    });
+                }
+            });      
+    }
+
+    function updateSuccess(json) {
+        var data=$.parseJSON(json.responseText);
+        if (data.result == "true") {
+            alert("保存成功！");
+            getWebGroup();
+        }  
+    }
+
+    function getWebGroup() {
+        var ulBody = "";      
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/Website/GetWebGroup",
+            success: function (json) {
+                $("#ulBody").html("");
+                var typeData = $.parseJSON(json);
+                $.each(typeData, function (i, n) {
+                    if (n.groupParentCode == 0) {
+                        ulBody += "<li><input name=\"rdoGroup\" type=\"radio\"  data-val='" + n.groupParentCode + "'  data-nm='" + n.groupName + "' data-cm='" + n.groupCount + "' value='" + n.id + "'/><span><i class=\"icon-folder-open\"></i> <a href=\"javascript:\">" + n.groupName + "</a></span>";
+                        ulBody += "<ul>";
+                        $.each(typeData, function (j, m) {                           
+                            if (n.id == m.groupParentCode) {
+                                ulBody += "<li><input name=\"rdoGroup\" type=\"radio\"  data-val='" + m.groupParentCode + "'  data-nm='" + m.groupName + "' data-cm='" + n.groupCount + "' value='" + m.id + "' /><span><i class=\"icon-minus-sign\"></i><a href=\"javascript:\" onclick='getModuleInfo(" + m.id + ")'> " + m.groupName + "</a></span></li>";
+                            }
+                        });
+                        ulBody += "</ul></li>";
+                    }
+                });            
+                $("#ulBody").append(ulBody);
+                $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+                $('.tree li.parent_li > span').on('click', function (e) {
+                    var children = $(this).parent('li.parent_li').find(' > ul > li');
+                    if (children.is(":visible")) {
+                        children.hide('fast');                       
+                    } else {
+                        children.show('fast');                      
+                    }
+                    e.stopPropagation();
+                });
+            }
+        });
+    }
+
+    $(function () {
+       getWebGroup();      
+       getModuleInfo();
+       $("#aDelete").click(function () {
+           var id = $("input[name='rdoGroup']:checked").val();        
+           if (id != "" && typeof(id) != "undefined") {
+               deleteWebGroup(id);
+           } else {
+               alert("请选择分组");
+           }
+       });
+
+       $("#aAdd").click(function () {
+           $("#divCount").hide();
+           $("#id").val("");
+           $("#pareId").val("");
+           $("#txtGroupName").val("");
+           $("#txtCount").val("");
+           $("#aAdd").attr("data-target", "");
+           if ($("input[name='rdoGroup']").length == 0) {
+               $("#aAdd").attr("data-target", "#myModal");
+               $("#divCount").show();
+               return;
+           }         
+           if ($("input[name='rdoGroup']:checked").length == 0) {
+               $("#aAdd").attr("data-target", "#myModal");
+               $("#divCount").show();
+               return;
+           }
+           var id = $("input[name='rdoGroup']:checked").val();
+           if (id != "" && typeof (id) != "undefined" && $("input[name='rdoGroup']:checked").attr("data-val") == "0") {               
+               $("#aAdd").attr("data-target","#myModal");
+               $("#pareId").val(id);
+               $("#divCount").show();
+           } else {
+               alert("请选择父级分组");
+           }
+       });
+
+       $("#aUpdate").click(function () {
+           $("#divCount").hide();
+           var id = $("input[name='rdoGroup']:checked").val();
+           if (id != "" && typeof (id) != "undefined") {
+               $("#aUpdate").attr("data-target", "#myModal");
+               $("#id").val(id);
+               $("#pareId").val($("input[name='rdoGroup']:checked").attr("data-val"));
+               $("#txtGroupName").val($("input[name='rdoGroup']:checked").attr("data-nm"));
+               $("#txtCount").val($("input[name='rdoGroup']:checked").attr("data-cm"));
+               if ($("input[name='rdoGroup']:checked").attr("data-val") == "0") {
+                   $("#divCount").show();
+               }
+           } else {
+               alert("请选择分组");
+           }
+       });
+
+       $("#addWebsit").click(function () {          
+           if ($("input[name='rdoGroup']").length == 0) {
+               alert("请选择分组");
+               return;
+           }
+           if ($("input[name='rdoGroup']:checked").length == 0) {
+               alert("请选择分组");
+               return;
+           }
+           var id = $("input[name='rdoGroup']:checked").val();
+           if (id != "" && typeof (id) != "undefined"&&$("input[name='rdoGroup']:checked").attr("data-val") != "0") {             
+                   window.location.href = "@Url.Action("AddWebSite", "Website")?Gid=" + id;          
+           } else {
+               alert("请选择子分组");
+           }
+       });
+    });
+
+</script>
+<br />
+<div class="container">
+    <div class="col-md-3">
+        <a href="javascript:" class="btn btn-primary btn-sm" id="aAdd" data-toggle="modal">增加</a><a href="javascript:" class="btn btn-primary btn-sm" id="aUpdate" data-toggle="modal">修改</a><a href="javascript:" class="btn btn-primary btn-sm" id="aDelete" >删除</a>      
+        <div class="tree well">          
+            <ul id="ulBody">               
+
+            </ul>           
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class=".table-responsive"  style="overflow: auto; width: 100%;font-size:small;padding:0px;">
+            <a href="#" class="btn btn-default" id="addWebsit">增加</a>
+            <table class="tabbable list-inline" id="myTb">
+                <thead>
+                    <tr>
+                        <th width="10%">名称</th>
+                        <th width="20%">站点</th>
+                        <th width="5%">用户名</th>
+                        <th width="5%">密码</th>
+                        <th width="5%">所属平台</th>
+                        <th width="15%">栏目</th>
+                        <th  width="40%">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tbBody"></tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+@using (Ajax.BeginForm(new AjaxOptions { Url = Url.Action("SaveWebSiteGroup"), OnComplete = "updateSuccess" }))
+{
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    项目名称
+                </h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="id" name="id"/>
+                <input type="hidden" id="pareId" name="pareId" value="0" />
+                <input type="text" class="form-control" id="txtGroupName" name="txtGroupName"
+                       placeholder="项目名称" data-val="true" data-val-required="项目名称不能为空！" />
+                <span data-valmsg-for="txtGroupName" data-valmsg-replace="true" class="text-warning"></span>           
+            </div>
+            <div class="modal-body" id="divCount">              
+               文章篇数 <input type="text" class="form-control" id="txtCount" name="txtCount"/>    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    提交更改
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+}
+

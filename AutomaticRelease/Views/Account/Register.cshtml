@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "注册会员";
+}
+
+<div style="padding: 10px 10px 10px;">
+   @using (Ajax.BeginForm(new AjaxOptions { Url = Url.Action("RegisterAccount")}))
+   {
+        <fieldset>
+            <legend>注册</legend>  
+           
+            <div class="form-group">
+                <label for="username" class="col-sm-1 control-label">用户名</label>
+                <div class="col-sm-10">                  
+                    <input type="text" class="form-control" id="username" name="username"
+                           placeholder="请输入用户名" data-val="true" data-val-required="用户名不能为空！" >  
+                    <span data-valmsg-for="username" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="password" class="col-sm-1 control-label">密码</label>
+                <div class="col-sm-10">
+                    <input type="password" id="password" name="password" class="form-control" 
+                           placeholder="请输入密码" data-val="true" data-val-required="密码不能为空！">
+                    <span data-valmsg-for="password" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="firstname" class="col-sm-1 control-label">确认密码</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="resetpassword" name="resetpassword"
+                           placeholder="确认密码" data-val="true" data-val-required="确认密码不能为空！" data-val-equalto="密码和确认密码不匹配。" data-val-equalto-other="password">
+                    <span data-valmsg-for="resetpassword" data-valmsg-replace="true" class="text-warning"></span>
+                </div>
+            </div><br /><br />
+            <div class="form-group">
+                <label for="firstname" class="col-sm-1 control-label">邀请码</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="usercode" name="usercode"
+                           placeholder="请输入邀请码">
+                </div><br />
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary btn-lg active" id="sbut">注册</button>
+                </div>
+            </div>
+        </fieldset>
+   }   
+</div>
