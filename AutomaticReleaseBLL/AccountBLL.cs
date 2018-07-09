@@ -79,11 +79,11 @@ where id=@id";
         }
 
         public static DataTable GetAllAccount(bool hasWeb=false)
-        {
-            var sql = "select * from [user] u,[webGroup] w where u.id = w.userId and w.groupParentCode=0";
+        {          
             var dtCache = CacheHelper.GetCache("AllAccount") as DataTable;
             if (dtCache == null||hasWeb)
             {
+                var sql = "select * from [user] u,[webGroup] w where u.id = w.userId and w.groupParentCode=0";
                 dtCache = SqlHelper.ExecuteDataTable(sql);
                 CacheHelper.SetCache("AllAccount", dtCache,1);
             }

@@ -1,0 +1,17 @@
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe.config
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\ConsoleApplication1.exe
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\ConsoleApplication1.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\6System.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\AutomaticReleaseBLL.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\EmpireCMS.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\HttpHelper.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\PostTool.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\AutoMaticReleaseDAL.dll
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\6System.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\AutomaticReleaseBLL.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\EmpireCMS.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\PostTool.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\bin\Debug\AutoMaticReleaseDAL.pdb
+E:\work\模拟登陆\login\ConsoleApplication1\obj\Debug\ConsoleApplication1.csprojResolveAssemblyReference.cache
+E:\work\模拟登陆\login\ConsoleApplication1\obj\Debug\ConsoleApplication1.exe
+E:\work\模拟登陆\login\ConsoleApplication1\obj\Debug\ConsoleApplication1.pdb
