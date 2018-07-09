@@ -30,6 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="6System">
+      <HintPath>..\..\git\Automatic\lib\6System.dll</HintPath>
+    </Reference>
+    <Reference Include="EmpireCMS">
+      <HintPath>..\..\git\Automatic\lib\EmpireCMS.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
@@ -48,17 +54,9 @@
     <Compile Include="WebsiteBLL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\6System\6System.csproj">
-      <Project>{24e467d4-b5ea-4ec3-b2a9-614c5a7081e4}</Project>
-      <Name>6System</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AutoMaticReleaseDAL\AutoMaticReleaseDAL.csproj">
       <Project>{77f84e4e-4603-4864-9d31-fe85f7fb8489}</Project>
       <Name>AutoMaticReleaseDAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EmpireCMS\EmpireCMS.csproj">
-      <Project>{54a1e06c-e439-47b4-8a5f-7c4bbab12abd}</Project>
-      <Name>EmpireCMS</Name>
     </ProjectReference>
     <ProjectReference Include="..\PostTool\PostTool.csproj">
       <Project>{5c9b8649-a6cd-49a4-833d-bfcddf48d77e}</Project>
